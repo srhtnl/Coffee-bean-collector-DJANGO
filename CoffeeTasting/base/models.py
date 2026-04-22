@@ -1,3 +1,35 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+class Bean(models.Model):
+    name = models.CharField(max_length=255)
+    country_of_origin = models.CharField(max_length=255)
+    harvest_season = models.CharField(max_length=255)
+    approved = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_beans'
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Tasting(models.Model):
+    bean = models.ForeignKey(Bean, on_delete=models.CASCADE, related_name='tastings')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tastings')
+    date = models.DateField()
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.user} - {self.bean} ({self.date})"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    favorite_method = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    date_of_birth = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Profile of {self.user}"

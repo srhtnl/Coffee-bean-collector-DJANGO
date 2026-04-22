@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Coffee Bean Collector{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+</head>
+<body>
+
+<nav>
+    <a class="brand" href="/">Coffee Bean Collector</a>
+    <ul>
+        <li><a href="/">Home</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="/profile/">Profiel</a></li>
+            <li><a href="/logout/">Uitloggen</a></li>
+        {% else %}
+            <li><a href="/login/">Inloggen</a></li>
+            <li><a href="/register/">Registreren</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
+</html>
