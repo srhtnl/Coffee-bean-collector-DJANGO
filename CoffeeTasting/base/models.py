@@ -26,9 +26,19 @@ class Tasting(models.Model):
 
 
 class Profile(models.Model):
+    BREWING_METHODS = [
+        ('espresso', 'Espresso'),
+        ('filter', 'Filter'),
+        ('french_press', 'French Press'),
+        ('pour_over', 'Pour Over'),
+        ('aeropress', 'AeroPress'),
+        ('moka_pot', 'Moka Pot'),
+        ('cold_brew', 'Cold Brew'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    favorite_method = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
+    favorite_method = models.CharField(max_length=50, choices=BREWING_METHODS, blank=True, default='')
+    city = models.CharField(max_length=255, blank=True, default='')
     date_of_birth = models.DateField(null=True, blank=True)
 
     def __str__(self):

@@ -14,14 +14,27 @@
     <ul>
         <li><a href="/">Home</a></li>
         {% if user.is_authenticated %}
-            <li><a href="/profile/">Profiel</a></li>
-            <li><a href="/logout/">Uitloggen</a></li>
+            <li><a href="{% url 'profile' %}">{{ user.get_full_name|default:user.username }}</a></li>
+            <li>
+                <form method="post" action="{% url 'logout' %}" style="margin:0;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-logout-btn">Uitloggen</button>
+                </form>
+            </li>
         {% else %}
-            <li><a href="/login/">Inloggen</a></li>
-            <li><a href="/register/">Registreren</a></li>
+            <li><a href="{% url 'login' %}">Inloggen</a></li>
+            <li><a href="{% url 'register' %}">Registreren</a></li>
         {% endif %}
     </ul>
 </nav>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
 
 <main>
     {% block content %}

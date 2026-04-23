@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Profiel bewerken - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Profiel bewerken</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in user_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="field-errors">
+                        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% for field in profile_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="field-errors">
+                        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Opslaan</button>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

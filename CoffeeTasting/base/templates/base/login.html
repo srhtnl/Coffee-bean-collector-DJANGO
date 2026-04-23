@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Inloggen - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Inloggen</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Gebruikersnaam</label>
+            <input type="text" name="username" id="id_username" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="id_password">Wachtwoord</label>
+            <input type="password" name="password" id="id_password" required>
+        </div>
+        <button type="submit" class="btn">Inloggen</button>
+    </form>
+    <p class="auth-link">Nog geen account? <a href="{% url 'register' %}">Registreer je</a></p>
+</div>
+{% endblock %}
