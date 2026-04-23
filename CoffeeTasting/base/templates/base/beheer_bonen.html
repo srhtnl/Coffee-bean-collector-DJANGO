@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Beheer - Koffiebonen goedkeuren{% endblock %}
+
+{% block content %}
+<div class="beheer-container">
+    <div class="bean-list-header">
+        <h1>Koffiebonen goedkeuren</h1>
+    </div>
+
+    {% if pending %}
+        <table class="bean-table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Land van herkomst</th>
+                    <th>Oogstseizoen</th>
+                    <th>Actie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bean in pending %}
+                    <tr>
+                        <td>{{ bean.name }}</td>
+                        <td>{{ bean.country_of_origin }}</td>
+                        <td>{{ bean.harvest_season }}</td>
+                        <td>
+                            <form method="post" action="{% url 'beheer_boon_goedkeuren' bean.pk %}" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-small">Goedkeuren</button>
+                            </form>
+                            <form method="post" action="{% url 'beheer_boon_afwijzen' bean.pk %}" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-small">Afwijzen</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Er zijn geen bonen die wachten op goedkeuring.</p>
+    {% endif %}
+
+    <div style="margin-top:1.5rem;">
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Profile
+from .models import Profile, Bean
 
 
 class RegisterForm(UserCreationForm):
@@ -38,4 +38,15 @@ class ProfileUpdateForm(forms.ModelForm):
         }
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+class BeanForm(forms.ModelForm):
+    class Meta:
+        model = Bean
+        fields = ['name', 'country_of_origin', 'harvest_season']
+        labels = {
+            'name': 'Naam',
+            'country_of_origin': 'Land van herkomst',
+            'harvest_season': 'Oogstseizoen',
         }

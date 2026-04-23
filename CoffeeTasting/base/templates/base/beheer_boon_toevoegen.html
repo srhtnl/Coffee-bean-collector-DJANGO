@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Beheer - Boon toevoegen{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Boon toevoegen</h1>
+    <p class="profile-intro">Bonen die jij toevoegt worden direct goedgekeurd.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="field-errors">
+                        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Toevoegen</button>
+            <a href="{% url 'beheer_bonen' %}" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

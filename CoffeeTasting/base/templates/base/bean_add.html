@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Koffieboon toevoegen - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1>Koffieboon toevoegen</h1>
+    {% if user.is_staff %}
+        <p class="profile-intro">Als admin wordt jouw boon direct goedgekeurd.</p>
+    {% else %}
+        <p class="profile-intro">Jouw boon wordt eerst door een admin goedgekeurd voordat deze zichtbaar is voor anderen.</p>
+    {% endif %}
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="field-errors">
+                        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Indienen</button>
+            <a href="{% url 'bean_list' %}" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

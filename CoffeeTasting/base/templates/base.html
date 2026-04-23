@@ -13,7 +13,11 @@
     <a class="brand" href="/">Coffee Bean Collector</a>
     <ul>
         <li><a href="/">Home</a></li>
+        <li><a href="{% url 'bean_list' %}">Koffiebonen</a></li>
         {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <li><a href="{% url 'beheer_bonen' %}">Koffiebonen goedkeuren</a></li>
+            {% endif %}
             <li><a href="{% url 'profile' %}">{{ user.get_full_name|default:user.username }}</a></li>
             <li>
                 <form method="post" action="{% url 'logout' %}" style="margin:0;">

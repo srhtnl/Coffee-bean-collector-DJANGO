@@ -150,6 +150,41 @@ main {
     background-color: #8a6a4a;
 }
 
+.btn-danger {
+    background-color: #a83232;
+}
+
+.btn-danger:hover {
+    background-color: #8b2020;
+}
+
+.btn-small {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+}
+
+.beheer-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ── Pending notice ── */
+.pending-notice {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.pending-notice a {
+    color: #856404;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
 .form-actions {
     display: flex;
     align-items: center;
@@ -200,5 +235,43 @@ main {
     width: 200px;
     flex-shrink: 0;
     color: #6b4c2a;
+}
+
+.bean-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.bean-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #d9cdbf;
+}
+
+.bean-table th,
+.bean-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f0e8dc;
+}
+
+.bean-table th {
+    background-color: #3b2a1a;
+    color: #f5f0eb;
+    font-weight: bold;
+}
+
+.bean-table tr:last-child td {
+    border-bottom: none;
+}
+
+.bean-table tr:hover td {
+    background-color: #faf6f1;
 }
 

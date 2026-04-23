@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib import messages
 
-from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm
+from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm
 
 
 def home(request):
@@ -75,3 +75,77 @@ def profile_edit(request):
         messages.success(request, 'Profiel bijgewerkt!')
         return redirect('profile')
     return render(request, 'base/profile_edit.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+def bean_list(request):
+    from .models import Bean
+    beans = Bean.objects.filter(approved=True).order_by('name')
+    pending_count = Bean.objects.filter(approved=False).count() if request.user.is_staff else 0
+    return render(request, 'base/bean_list.html', {'beans': beans, 'pending_count': pending_count})
+
+
+@login_required(login_url='/login/')
+def bean_add(request):
+    form = BeanForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        bean = form.save(commit=False)
+        if request.user.is_staff:
+            bean.approved = True
+            bean.approved_by = request.user
+            bean.save()
+            messages.success(request, 'Koffieboon toegevoegd en direct goedgekeurd.')
+        else:
+            bean.approved = False
+            bean.save()
+            messages.success(request, 'Koffieboon ingediend! Een admin keurt deze binnenkort goed.')
+        return redirect('bean_list')
+    return render(request, 'base/bean_add.html', {'form': form})
+
+
+def staff_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        if not request.user.is_staff:
+            return redirect('home')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+@staff_required
+def beheer_bonen(request):
+    from .models import Bean
+    pending = Bean.objects.filter(approved=False).order_by('name')
+    return render(request, 'base/beheer_bonen.html', {'pending': pending})
+
+
+@staff_required
+def beheer_boon_goedkeuren(request, pk):
+    from .models import Bean
+    if request.method == 'POST':
+        bean = Bean.objects.get(pk=pk)
+        bean.approved = True
+        bean.approved_by = request.user
+        bean.save()
+    return redirect('beheer_bonen')
+
+
+@staff_required
+def beheer_boon_afwijzen(request, pk):
+    from .models import Bean
+    if request.method == 'POST':
+        Bean.objects.filter(pk=pk).delete()
+    return redirect('beheer_bonen')
+
+
+@staff_required
+def beheer_boon_toevoegen(request):
+    form = BeanForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        bean = form.save(commit=False)
+        bean.approved = True
+        bean.approved_by = request.user
+        bean.save()
+        messages.success(request, 'Koffieboon toegevoegd en direct goedgekeurd.')
+        return redirect('beheer_bonen')
+    return render(request, 'base/beheer_boon_toevoegen.html', {'form': form})

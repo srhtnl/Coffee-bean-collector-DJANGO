@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Koffiebonen - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="bean-list-container">
+    <div class="bean-list-header">
+        <h1>Koffiebonen</h1>
+        {% if user.is_authenticated %}
+            <a href="{% url 'bean_add' %}" class="btn">+ Boon toevoegen</a>
+        {% endif %}
+    </div>
+
+    {% if user.is_staff and pending_count %}
+        <div class="pending-notice">
+            Er zijn momenteel <strong>{{ pending_count }}</strong> koffiebo{{ pending_count|pluralize:"n,nen" }} die wachten op goedkeuring.
+            <a href="{% url 'beheer_bonen' %}">Bekijk en keur goed →</a>
+        </div>
+    {% endif %}
+
+    {% if beans %}
+        <table class="bean-table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Land van herkomst</th>
+                    <th>Oogstseizoen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bean in beans %}
+                    <tr>
+                        <td>{{ bean.name }}</td>
+                        <td>{{ bean.country_of_origin }}</td>
+                        <td>{{ bean.harvest_season }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Er zijn nog geen goedgekeurde koffiebonen.</p>
+    {% endif %}
+</div>
+{% endblock %}
