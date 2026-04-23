@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib import messages
 
 from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm
@@ -48,6 +49,17 @@ def user_logout(request):
 @login_required(login_url='/login/')
 def profile(request):
     return render(request, 'base/profile.html')
+
+
+@login_required(login_url='/login/')
+def change_password(request):
+    form = SetPasswordForm(request.user, request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        messages.success(request, 'Wachtwoord succesvol gewijzigd!')
+        return redirect('profile')
+    return render(request, 'base/change_password.html', {'form': form})
 
 
 @login_required(login_url='/login/')
