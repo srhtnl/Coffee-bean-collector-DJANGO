@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Profile, Bean
+from .models import Profile, Bean, Tasting
 
 
 class RegisterForm(UserCreationForm):
@@ -52,3 +52,22 @@ class BeanForm(forms.ModelForm):
             'harvest_season': 'Oogstseizoen',
             'in_season': 'Momenteel leverbaar',
         }
+
+
+class TastingForm(forms.ModelForm):
+    class Meta:
+        model = Tasting
+        fields = ['bean', 'date', 'description']
+        labels = {
+            'bean': 'Koffieboon',
+            'date': 'Datum',
+            'description': 'Beschrijving',
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['bean'].queryset = Bean.objects.filter(approved=True).order_by('name')

@@ -17,4 +17,5 @@ urlpatterns = [
     path('beheer/bonen/toevoegen/', views.beheer_boon_toevoegen, name='beheer_boon_toevoegen'),
     path('beheer/bonen/<int:pk>/goedkeuren/', views.beheer_boon_goedkeuren, name='beheer_boon_goedkeuren'),
     path('beheer/bonen/<int:pk>/afwijzen/', views.beheer_boon_afwijzen, name='beheer_boon_afwijzen'),
+    path('tasting/toevoegen/', views.tasting_add, name='tasting_add'),
 ]

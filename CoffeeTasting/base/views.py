@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib import messages
 
-from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm
+from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm, TastingForm
 
 
 def home(request):
@@ -165,3 +165,14 @@ def beheer_boon_toevoegen(request):
         messages.success(request, 'Koffieboon toegevoegd en direct goedgekeurd.')
         return redirect('beheer_bonen')
     return render(request, 'base/beheer_boon_toevoegen.html', {'form': form})
+
+@login_required(login_url='/login/')
+def tasting_add(request):
+    form = TastingForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        tasting = form.save(commit=False)
+        tasting.user = request.user 
+        tasting.save()
+        messages.success(request, 'Proefsessie succesvol toegevoegd!')
+        return redirect('profile') 
+    return render(request, 'base/tasting_add.html', {'form': form})

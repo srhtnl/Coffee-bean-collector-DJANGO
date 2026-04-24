@@ -35,3 +35,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.user}"
+
+
+class Tasting(models.Model):
+    bean = models.ForeignKey('Bean', on_delete=models.CASCADE, related_name='tastings')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tastings')
+    date = models.DateField()
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.bean.name} ({self.date})"
