@@ -51,6 +51,15 @@ def profile(request):
     return render(request, 'base/profile.html')
 
 
+def public_profile(request, username):
+    from django.shortcuts import get_object_or_404
+    from django.contrib.auth.models import User
+    from .models import Profile
+    profile_user = get_object_or_404(User, username=username)
+    Profile.objects.get_or_create(user=profile_user)
+    return render(request, 'base/public_profile.html', {'profile_user': profile_user})
+
+
 @login_required(login_url='/login/')
 def change_password(request):
     form = SetPasswordForm(request.user, request.POST or None)

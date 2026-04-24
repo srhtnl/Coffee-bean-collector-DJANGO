@@ -9,6 +9,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/wachtwoord/', views.change_password, name='change_password'),
+    path('profile/<str:username>/', views.public_profile, name='public_profile'),
     path('bonen/', views.bean_list, name='bean_list'),
     path('bonen/toevoegen/', views.bean_add, name='bean_add'),
     path('beheer/bonen/', views.beheer_bonen, name='beheer_bonen'),

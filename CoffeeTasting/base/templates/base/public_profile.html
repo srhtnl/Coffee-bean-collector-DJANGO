@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile_user.username }} - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>{{ profile_user.first_name|default:profile_user.username }}</h1>
+    <p class="profile-intro">Publiek profiel van {{ profile_user.username }}</p>
+
+    <div class="profile-card">
+        <div class="profile-row">
+            <span class="profile-label">Gebruikersnaam</span>
+            <span class="profile-value">{{ profile_user.username }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Voornaam</span>
+            <span class="profile-value">{{ profile_user.first_name|default:"—" }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Achternaam</span>
+            <span class="profile-value">{{ profile_user.last_name|default:"—" }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Woonplaats</span>
+            <span class="profile-value">{{ profile_user.profile.city|default:"—" }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Favoriete zetmethode</span>
+            <span class="profile-value">{{ profile_user.profile.get_favorite_method_display|default:"—" }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
