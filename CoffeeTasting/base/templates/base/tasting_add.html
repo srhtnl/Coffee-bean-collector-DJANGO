@@ -1,0 +1,15 @@
+{% extends 'base.html' %} 
+{% block title %}Proefsessie Toevoegen | Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Nieuwe Proefsessie Toevoegen</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <table style="margin-bottom: 15px;">
+            {{ form.as_table }}
+        </table>
+        <button type="submit" class="btn">Opslaan</button>
+    </form>
+</div>
+{% endblock %}
