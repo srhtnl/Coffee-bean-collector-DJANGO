@@ -44,9 +44,11 @@ class ProfileUpdateForm(forms.ModelForm):
 class BeanForm(forms.ModelForm):
     class Meta:
         model = Bean
-        fields = ['name', 'country_of_origin', 'harvest_season']
+        fields = ['name', 'country_of_origin', 'roaster', 'harvest_season', 'in_season']
         labels = {
             'name': 'Naam',
             'country_of_origin': 'Land van herkomst',
+            'roaster': 'Brander / merk',
             'harvest_season': 'Oogstseizoen',
+            'in_season': 'Momenteel leverbaar',
         }

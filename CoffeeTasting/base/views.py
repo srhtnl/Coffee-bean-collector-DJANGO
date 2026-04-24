@@ -93,6 +93,13 @@ def bean_list(request):
     return render(request, 'base/bean_list.html', {'beans': beans, 'pending_count': pending_count})
 
 
+def bean_detail(request, pk):
+    from django.shortcuts import get_object_or_404
+    from .models import Bean
+    bean = get_object_or_404(Bean, pk=pk, approved=True)
+    return render(request, 'base/bean_detail.html', {'bean': bean})
+
+
 @login_required(login_url='/login/')
 def bean_add(request):
     form = BeanForm(request.POST or None)

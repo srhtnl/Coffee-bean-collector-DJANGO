@@ -30,7 +30,7 @@
             <tbody>
                 {% for bean in beans %}
                     <tr>
-                        <td>{{ bean.name }}</td>
+                        <td><a href="{% url 'bean_detail' bean.pk %}">{{ bean.name }}</a></td>
                         <td>{{ bean.country_of_origin }}</td>
                         <td>{{ bean.harvest_season }}</td>
                     </tr>

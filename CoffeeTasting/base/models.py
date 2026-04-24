@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 class Bean(models.Model):
     name = models.CharField(max_length=255)
     country_of_origin = models.CharField(max_length=255)
+    roaster = models.CharField(max_length=255, blank=True, default='')
     harvest_season = models.CharField(max_length=255)
+    in_season = models.BooleanField(default=True)
     approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_beans'

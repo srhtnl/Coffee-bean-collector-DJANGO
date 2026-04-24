@@ -11,6 +11,7 @@ urlpatterns = [
     path('profile/wachtwoord/', views.change_password, name='change_password'),
     path('profile/<str:username>/', views.public_profile, name='public_profile'),
     path('bonen/', views.bean_list, name='bean_list'),
+    path('bonen/<int:pk>/', views.bean_detail, name='bean_detail'),
     path('bonen/toevoegen/', views.bean_add, name='bean_add'),
     path('beheer/bonen/', views.beheer_bonen, name='beheer_bonen'),
     path('beheer/bonen/toevoegen/', views.beheer_boon_toevoegen, name='beheer_boon_toevoegen'),

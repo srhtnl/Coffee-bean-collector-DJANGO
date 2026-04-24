@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bean.name }} - Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>{{ bean.name }}</h1>
+
+    <div class="profile-card">
+        <div class="profile-row">
+            <span class="profile-label">Land van herkomst</span>
+            <span class="profile-value">{{ bean.country_of_origin }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Brander / merk</span>
+            <span class="profile-value">{{ bean.roaster|default:"—" }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Oogstseizoen</span>
+            <span class="profile-value">{{ bean.harvest_season }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Leverbaar</span>
+            <span class="profile-value">
+                {% if bean.in_season %}
+                    <span style="color: green;">✔ In seizoen</span>
+                {% else %}
+                    <span style="color: #c0392b;">✘ Niet leverbaar</span>
+                {% endif %}
+            </span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Aantal keer geproefd</span>
+            <span class="profile-value">0</span>
+        </div>
+        {% if user.is_staff %}
+        <div class="profile-row">
+            <span class="profile-label">Goedgekeurd door</span>
+            <span class="profile-value">
+                {% if bean.approved_by %}
+                    {% if bean.approved_by.first_name or bean.approved_by.last_name %}
+                        {{ bean.approved_by.first_name }} {{ bean.approved_by.last_name }}
+                    {% else %}
+                        {{ bean.approved_by.username }}
+                    {% endif %}
+                {% else %}
+                    —
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'bean_list' %}" class="btn btn-secondary">← Terug naar overzicht</a>
+</div>
+{% endblock %}
