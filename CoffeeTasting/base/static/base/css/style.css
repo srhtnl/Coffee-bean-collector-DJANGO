@@ -16,7 +16,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    height: 72px;
 }
 
 nav .brand {
@@ -24,6 +24,14 @@ nav .brand {
     font-size: 1.2rem;
     font-weight: bold;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 54px;
+    width: auto;
+    display: block;
 }
 
 nav ul {
@@ -35,7 +43,7 @@ nav ul {
 nav ul li a {
     color: #f5f0eb;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
 }
 
 nav ul li a:hover {
@@ -368,9 +376,10 @@ main {
     padding: 3rem 1rem 2rem;
 }
 
-.home-hero h1 {
-    font-size: 2.2rem;
-    margin-bottom: 0.75rem;
+.home-logo {
+    height: 120px;
+    width: auto;
+    margin-bottom: 1.25rem;
 }
 
 .home-hero p {

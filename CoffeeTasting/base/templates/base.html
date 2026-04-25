@@ -10,7 +10,7 @@
 <body>
 
 <nav>
-    <a class="brand" href="/">Coffee Bean Collector</a>
+    <a class="brand" href="/"><img src="{% static 'base/img/Logo-navbar.png' %}" alt="Coffee Bean Collector" class="nav-logo"></a>
     <ul>
         {% if user.is_authenticated %}
             <li><a href="{% url 'newsfeed' %}">Nieuwsfeed</a></li>

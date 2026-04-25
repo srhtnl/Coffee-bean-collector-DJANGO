@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home - Coffee Bean Collector{% endblock %}
 
 {% block content %}
 <div class="home-hero">
-    <h1>Coffee Bean Collector</h1>
-    <p>Ontdek unieke koffiebonen van over de hele wereld. Houd je proefsessies bij en zie wat andere koffieliefhebbers drinken.</p>
+    <img src="{% static 'base/img/Logo-home.png' %}" alt="Coffee Bean Collector" class="home-logo">
+    <p>Leg je proefsessies vast, ontdek bijzondere koffiebonen van over de hele wereld en deel je ervaringen met andere koffieliefhebbers.</p>
     {% if not user.is_authenticated %}
         <div class="home-hero-actions">
             <a href="{% url 'register' %}" class="btn">Maak een account aan</a>
