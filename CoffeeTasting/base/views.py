@@ -8,7 +8,15 @@ from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm, Ta
 
 
 def home(request):
-    return render(request, "base/home.html")
+    from .models import Bean, Tasting
+    from django.contrib.auth.models import User
+    context = {
+        'bean_count': Bean.objects.filter(approved=True).count(),
+        'tasting_count': Tasting.objects.count(),
+        'user_count': User.objects.count(),
+        'recent_tastings': Tasting.objects.select_related('user', 'bean').order_by('-date', '-id')[:6],
+    }
+    return render(request, "base/home.html", context)
 
 
 def register(request):

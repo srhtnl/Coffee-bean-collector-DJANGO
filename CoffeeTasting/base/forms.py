@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -37,8 +39,14 @@ class ProfileUpdateForm(forms.ModelForm):
             'favorite_method': 'Favoriete zetmethode',
         }
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'max': datetime.date.today().isoformat()}),
         }
+
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data.get('date_of_birth')
+        if dob and dob > datetime.date.today():
+            raise forms.ValidationError('Geboortedatum kan niet in de toekomst liggen.')
+        return dob
 
 
 class BeanForm(forms.ModelForm):
@@ -64,10 +72,16 @@ class TastingForm(forms.ModelForm):
             'description': 'Beschrijving',
         }
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'max': datetime.date.today().isoformat()}),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields['bean'].queryset = Bean.objects.filter(approved=True).order_by('name')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['bean'].queryset = Bean.objects.filter(approved=True).order_by('name')
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if date and date > datetime.date.today():
+            raise forms.ValidationError('Datum kan niet in de toekomst liggen.')
+        return date

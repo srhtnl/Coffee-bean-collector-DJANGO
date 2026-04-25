@@ -3,7 +3,57 @@
 {% block title %}Home - Coffee Bean Collector{% endblock %}
 
 {% block content %}
-<h1>Welkom bij Coffee Bean Collector</h1>
-<p>Ontdek, proef en verzamel de beste koffiebonen van over de hele wereld.</p>
+<div class="home-hero">
+    <h1>Coffee Bean Collector</h1>
+    <p>Ontdek unieke koffiebonen van over de hele wereld. Houd je proefsessies bij en zie wat andere koffieliefhebbers drinken.</p>
+    {% if not user.is_authenticated %}
+        <div class="home-hero-actions">
+            <a href="{% url 'register' %}" class="btn">Maak een account aan</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Inloggen</a>
+        </div>
+    {% else %}
+        <div class="home-hero-actions">
+            <a href="{% url 'tasting_add' %}" class="btn">+ Nieuwe proefsessie</a>
+            <a href="{% url 'bean_list' %}" class="btn btn-secondary">Bekijk koffiebonen</a>
+        </div>
+    {% endif %}
+</div>
 
+<div class="home-stats">
+    <div class="stat-card">
+        <span class="stat-number">{{ bean_count }}</span>
+        <span class="stat-label">Koffiebonen</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ tasting_count }}</span>
+        <span class="stat-label">Proefsessies</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ user_count }}</span>
+        <span class="stat-label">Gebruikers</span>
+    </div>
+</div>
+
+{% if recent_tastings %}
+<div class="home-recent">
+    <div class="home-section-header">
+        <h2>Recente proefsessies</h2>
+        <a href="{% url 'newsfeed' %}">Alle proefsessies &rarr;</a>
+    </div>
+    <div class="feed-grid">
+        {% for tasting in recent_tastings %}
+            <div class="feed-card">
+                <div class="feed-card-header">
+                    <span class="feed-bean">{{ tasting.bean.name }}</span>
+                    <span class="feed-date">{{ tasting.date|date:"d-m-Y" }}</span>
+                </div>
+                <p class="feed-description">{{ tasting.description|truncatechars:100 }}</p>
+                <div class="feed-card-footer">
+                    door <a href="{% url 'public_profile' tasting.user.username %}">{{ tasting.user.get_full_name|default:tasting.user.username }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}
