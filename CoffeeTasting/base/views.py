@@ -177,7 +177,10 @@ def beheer_boon_toevoegen(request):
 
 @login_required(login_url='/login/')
 def tasting_add(request):
-    form = TastingForm(request.POST or None)
+    bean_id = request.GET.get('bean')
+    initial = {'bean': bean_id} if bean_id else {}
+    
+    form = TastingForm(request.POST or None, initial=initial)
     if request.method == 'POST' and form.is_valid():
         tasting = form.save(commit=False)
         tasting.user = request.user 

@@ -52,5 +52,10 @@
     </div>
 
     <a href="{% url 'bean_list' %}" class="btn btn-secondary">← Terug naar overzicht</a>
+
+    {% if user.is_authenticated %}
+    <a href="{% url 'tasting_add' %}?bean={{ bean.pk }}" class="btn btn-primary">+ Tasting Toevoegen</a>
+    {% endif %}
+
 </div>
 {% endblock %}
