@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib import messages
 
-from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm, TastingForm
+from .forms import RegisterForm, ProfileUpdateForm, UserUpdateForm, BeanForm, TastingForm, Tasting
 
 
 def home(request):
@@ -172,7 +172,58 @@ def tasting_add(request):
     if request.method == 'POST' and form.is_valid():
         tasting = form.save(commit=False)
         tasting.user = request.user 
-        tasting.save()
-        messages.success(request, 'Proefsessie succesvol toegevoegd!')
-        return redirect('profile') 
+
+        already_exists = Tasting.objects.filter(
+            user=request.user,
+            bean=tasting.bean,
+            date=tasting.date).exists()
+        
+        if already_exists:
+            messages.error(request, 'Je hebt deze koffie vandaag al geproefd!')
+        else:
+            tasting.save()
+            messages.success(request, 'Proefsessie succesvol toegevoegd!')
+            return redirect('profile') 
     return render(request, 'base/tasting_add.html', {'form': form})
+
+@login_required(login_url='/login/')
+def tasting_list(request):
+    from .models import Tasting
+    tastings = Tasting.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'base/tasting_list.html', {'tastings': tastings})
+
+@login_required(login_url='/login/')
+def tasting_edit(request, pk):
+    from .models import Tasting
+
+    tasting = Tasting.objects.get(pk=pk, user=request.user)
+
+    form = TastingForm(request.POST or None, instance=tasting)
+
+    if request.method == 'POST' and form.is_valid():
+        already_tasted = Tasting.objects.filter(
+            user=request.user, 
+            bean=form.cleaned_data['bean'], 
+            date=form.cleaned_data['date']
+        ).exclude(pk=tasting.pk).exists()
+
+        if already_tasted:
+            messages.error(request, "Je hebt op deze datum al een andere proefsessie voor deze boon.")
+        else:
+            form.save()
+            messages.success(request, 'Proefsessie succesvol bijgewerkt!')
+            return redirect('tasting_list')
+    
+    return render(request, 'base/tasting_edit.html', {'form': form, 'tasting': tasting})
+
+@login_required(login_url='/login/')
+def tasting_delete(request, pk):
+    from .models import Tasting
+    tasting = Tasting.objects.get(pk=pk, user=request.user)
+    
+    if request.method == 'POST':
+        tasting.delete()
+        messages.success(request, 'Proefsessie verwijderd.')
+        return redirect('tasting_list')
+        
+    return render(request, 'base/tasting_confirm_delete.html', {'tasting': tasting})

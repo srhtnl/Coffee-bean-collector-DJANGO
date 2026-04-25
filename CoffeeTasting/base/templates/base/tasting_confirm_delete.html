@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Proefsessie Verwijderen | Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Proefsessie Verwijderen</h2>
+    
+    <div class="profile-card">
+        <p>Weet je zeker dat je de proefsessie voor <strong>{{ tasting.bean.name }}</strong> van {{ tasting.date|date:"d-m-Y" }} wilt verwijderen?</p>
+        <p><em>Deze actie kan niet ongedaan worden gemaakt.</em></p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
+        <a href="{% url 'tasting_list' %}" class="btn btn-secondary">Annuleren</a>
+    </form>
+</div>
+{% endblock %}

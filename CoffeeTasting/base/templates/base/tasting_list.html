@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Mijn Proefsessies | Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="bean-list-container">
+    <div class="bean-list-header">
+        <h1>Mijn Proefsessies</h1>
+        <a href="{% url 'tasting_add' %}" class="btn">+ Nieuwe Proefsessie</a>
+    </div>
+
+    {% if tastings %}
+        <table class="bean-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Koffieboon</th>
+                    <th>Beschrijving</th>
+                    <th>Acties</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tasting in tastings %}
+                    <tr>
+                        <td>{{ tasting.date|date:"d-m-Y" }}</td>
+                        <td>{{ tasting.bean.name }}</td>
+                        <td>{{ tasting.description|truncatechars:40 }}</td> 
+                        <td>
+                            <a href="{% url 'tasting_edit' tasting.pk %}" class="btn btn-small">Bewerken</a>
+                            <a href="{% url 'tasting_delete' tasting.pk %}" class="btn btn-danger btn-small">Verwijderen</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Je hebt nog geen proefsessies geregistreerd.</p>
+    {% endif %}
+</div>
+{% endblock %}
