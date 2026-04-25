@@ -14,6 +14,7 @@
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="{% url 'bean_list' %}">Koffiebonen</a></li>
+        <li><a href="{% url 'newsfeed' %}">Nieuwsfeed</a></li>
         {% if user.is_authenticated %}
             {% if user.is_staff %}
                 <li><a href="{% url 'beheer_bonen' %}">Koffiebonen goedkeuren</a></li>

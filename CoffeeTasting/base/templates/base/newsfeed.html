@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Nieuwsfeed | Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="bean-list-container">
+    <h1 style="margin-bottom: 0.4rem;">Nieuwsfeed</h1>
+    <p style="color: #8a6a4a; margin-bottom: 1.5rem; font-size: 0.95rem;">Alle proefsessies van alle gebruikers, van nieuwste naar oudste.</p>
+
+    {% if tastings %}
+        <div class="feed-grid">
+            {% for tasting in tastings %}
+                <div class="feed-card">
+                    <div class="feed-card-header">
+                        <span class="feed-bean">{{ tasting.bean.name }}</span>
+                        <span class="feed-date">{{ tasting.date|date:"d-m-Y" }}</span>
+                    </div>
+                    <p class="feed-description">{{ tasting.description }}</p>
+                    <div class="feed-card-footer">
+                        door <a href="{% url 'public_profile' tasting.user.username %}">{{ tasting.user.get_full_name|default:tasting.user.username }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Er zijn nog geen proefsessies geregistreerd.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -227,3 +227,9 @@ def tasting_delete(request, pk):
         return redirect('tasting_list')
         
     return render(request, 'base/tasting_confirm_delete.html', {'tasting': tasting})
+
+
+def newsfeed(request):
+    from .models import Tasting
+    tastings = Tasting.objects.select_related('user', 'bean').order_by('-date', '-id')
+    return render(request, 'base/newsfeed.html', {'tastings': tastings})

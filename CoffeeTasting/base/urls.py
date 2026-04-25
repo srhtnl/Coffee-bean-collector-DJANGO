@@ -21,4 +21,5 @@ urlpatterns = [
     path('mijn-proefsessies/', views.tasting_list, name='tasting_list'),
     path('proefsessie/<int:pk>/bewerken/', views.tasting_edit, name='tasting_edit'),
     path('proefsessie/<int:pk>/verwijderen/', views.tasting_delete, name='tasting_delete'),
+    path('nieuwsfeed/', views.newsfeed, name='newsfeed'),
 ]
