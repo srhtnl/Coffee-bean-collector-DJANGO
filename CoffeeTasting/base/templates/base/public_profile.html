@@ -29,5 +29,39 @@
             <span class="profile-value">{{ profile_user.profile.get_favorite_method_display|default:"—" }}</span>
         </div>
     </div>
+
+    {% if tastings %}
+    <div style="margin-top: 2rem;">
+        <h2 style="margin-bottom: 1rem;">Proefsessies van {{ profile_user.username }}</h2>
+        {% if tastings %}
+            <table class="bean-table">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Koffieboon</th>
+                        <th>Beschrijving</th>
+                        {% if user.is_staff %}<th>Actie</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tasting in tastings %}
+                        <tr>
+                            <td>{{ tasting.date|date:"d-m-Y" }}</td>
+                            <td>{{ tasting.bean.name }}</td>
+                            <td>{{ tasting.description|truncatechars:60 }}</td>
+                            {% if user.is_staff %}
+                            <td>
+                                <a href="{% url 'tasting_delete' tasting.pk %}" class="btn btn-danger btn-small">Verwijderen</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Deze gebruiker heeft nog geen proefsessies.</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

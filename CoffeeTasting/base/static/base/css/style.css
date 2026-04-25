@@ -158,6 +158,10 @@ main {
     background-color: #8b2020;
 }
 
+.bean-table td .btn {
+    margin-top: 0;
+}
+
 .btn-small {
     padding: 0.35rem 0.85rem;
     font-size: 0.85rem;

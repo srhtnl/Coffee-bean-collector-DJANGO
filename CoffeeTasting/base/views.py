@@ -54,10 +54,11 @@ def profile(request):
 def public_profile(request, username):
     from django.shortcuts import get_object_or_404
     from django.contrib.auth.models import User
-    from .models import Profile
+    from .models import Profile, Tasting
     profile_user = get_object_or_404(User, username=username)
     Profile.objects.get_or_create(user=profile_user)
-    return render(request, 'base/public_profile.html', {'profile_user': profile_user})
+    tastings = Tasting.objects.filter(user=profile_user).select_related('bean').order_by('-date')
+    return render(request, 'base/public_profile.html', {'profile_user': profile_user, 'tastings': tastings})
 
 
 @login_required(login_url='/login/')
@@ -218,12 +219,20 @@ def tasting_edit(request, pk):
 
 @login_required(login_url='/login/')
 def tasting_delete(request, pk):
+    from django.shortcuts import get_object_or_404
     from .models import Tasting
-    tasting = Tasting.objects.get(pk=pk, user=request.user)
+    if request.user.is_staff:
+        tasting = get_object_or_404(Tasting, pk=pk)
+    else:
+        tasting = get_object_or_404(Tasting, pk=pk, user=request.user)
     
     if request.method == 'POST':
+        owner_username = tasting.user.username
+        is_admin_action = request.user.is_staff and tasting.user != request.user
         tasting.delete()
         messages.success(request, 'Proefsessie verwijderd.')
+        if is_admin_action:
+            return redirect('public_profile', username=owner_username)
         return redirect('tasting_list')
         
     return render(request, 'base/tasting_confirm_delete.html', {'tasting': tasting})

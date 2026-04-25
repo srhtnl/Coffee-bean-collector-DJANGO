@@ -12,13 +12,12 @@
 <nav>
     <a class="brand" href="/">Coffee Bean Collector</a>
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="{% url 'bean_list' %}">Koffiebonen</a></li>
-        <li><a href="{% url 'newsfeed' %}">Nieuwsfeed</a></li>
         {% if user.is_authenticated %}
+            <li><a href="{% url 'bean_list' %}">Koffiebonen</a></li>
             {% if user.is_staff %}
                 <li><a href="{% url 'beheer_bonen' %}">Koffiebonen goedkeuren</a></li>
             {% endif %}
+            <li><a href="{% url 'newsfeed' %}">Nieuwsfeed</a></li>
             <li><a href="{% url 'tasting_list' %}">Mijn Tastings</a></li>
             <li><a href="{% url 'tasting_add' %}">Tasting Toevoegen</a></li>
             <li><a href="{% url 'profile' %}">{{ user.get_full_name|default:user.username }}</a></li>
@@ -29,6 +28,8 @@
                 </form>
             </li>
         {% else %}
+            <li><a href="{% url 'bean_list' %}">Koffiebonen</a></li>
+            <li><a href="{% url 'newsfeed' %}">Nieuwsfeed</a></li>
             <li><a href="{% url 'login' %}">Inloggen</a></li>
             <li><a href="{% url 'register' %}">Registreren</a></li>
         {% endif %}

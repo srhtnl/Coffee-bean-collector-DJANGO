@@ -13,7 +13,11 @@
     <form method="POST">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
-        <a href="{% url 'tasting_list' %}" class="btn btn-secondary">Annuleren</a>
+        {% if user.is_staff and tasting.user != user %}
+            <a href="{% url 'public_profile' tasting.user.username %}" class="btn btn-secondary">Annuleren</a>
+        {% else %}
+            <a href="{% url 'tasting_list' %}" class="btn btn-secondary">Annuleren</a>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
