@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ profile_user.username }} - Coffee Bean Collector{% endblock %}
+{% block title %}{{ profile_user.first_name|default:profile_user.username }} - Coffee Bean Collector{% endblock %}
 
 {% block content %}
 <div class="profile-container">
@@ -48,7 +48,7 @@
                         <tr>
                             <td>{{ tasting.date|date:"d-m-Y" }}</td>
                             <td>{{ tasting.bean.name }}</td>
-                            <td>{{ tasting.description|truncatechars:60 }}</td>
+                            <td>{{ tasting.description|truncatechars:80 }}</td>
                             {% if user.is_staff %}
                             <td>
                                 <a href="{% url 'tasting_delete' tasting.pk %}" class="btn btn-danger btn-small">Verwijderen</a>

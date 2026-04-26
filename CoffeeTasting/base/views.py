@@ -28,7 +28,7 @@ def register(request):
         from .models import Profile
         Profile.objects.get_or_create(user=user)
         login(request, user)
-        messages.success(request, 'Registratie geslaagd! Welkom, {}!'.format(user.username))
+        messages.success(request, f'Registratie geslaagd! Welkom, {user.username}!')
         return redirect('profile')
     return render(request, 'base/register.html', {'form': form})
 
@@ -146,9 +146,10 @@ def beheer_bonen(request):
 
 @staff_required
 def beheer_boon_goedkeuren(request, pk):
+    from django.shortcuts import get_object_or_404
     from .models import Bean
+    bean = get_object_or_404(Bean, pk=pk)
     if request.method == 'POST':
-        bean = Bean.objects.get(pk=pk)
         bean.approved = True
         bean.approved_by = request.user
         bean.save()
@@ -161,6 +162,29 @@ def beheer_boon_afwijzen(request, pk):
     if request.method == 'POST':
         Bean.objects.filter(pk=pk).delete()
     return redirect('beheer_bonen')
+
+
+@staff_required
+def beheer_boon_verwijderen(request, pk):
+    from django.shortcuts import get_object_or_404
+    from .models import Bean
+    bean = get_object_or_404(Bean, pk=pk)
+    tasting_count = bean.tastings.count()
+    if request.method == 'POST':
+        bean_name = bean.name
+        bean.delete()
+        if tasting_count:
+            messages.success(
+                request,
+                f'Koffieboon "{bean_name}" en {tasting_count} gekoppelde proefsessie{"s" if tasting_count != 1 else ""} verwijderd.'
+            )
+        else:
+            messages.success(request, f'Koffieboon "{bean_name}" verwijderd.')
+        return redirect('bean_list')
+    return render(request, 'base/bean_confirm_delete.html', {
+        'bean': bean,
+        'tasting_count': tasting_count,
+    })
 
 
 @staff_required
@@ -206,9 +230,10 @@ def tasting_list(request):
 
 @login_required(login_url='/login/')
 def tasting_edit(request, pk):
+    from django.shortcuts import get_object_or_404
     from .models import Tasting
 
-    tasting = Tasting.objects.get(pk=pk, user=request.user)
+    tasting = get_object_or_404(Tasting, pk=pk, user=request.user)
 
     form = TastingForm(request.POST or None, instance=tasting)
 

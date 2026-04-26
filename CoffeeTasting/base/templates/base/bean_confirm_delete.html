@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Koffieboon Verwijderen | Coffee Bean Collector{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Koffieboon Verwijderen</h2>
+
+    <div class="profile-card">
+        <p>Weet je zeker dat je de koffieboon <strong>{{ bean.name }}</strong> wilt verwijderen?</p>
+
+        {% if tasting_count %}
+            <p>
+                Hierdoor word{{ tasting_count|pluralize:"t,en" }} ook
+                <strong>{{ tasting_count }}</strong> gekoppelde proefsessie{{ tasting_count|pluralize:",s" }}
+                permanent verwijderd.
+            </p>
+        {% else %}
+            <p>Er zijn geen proefsessies aan deze boon gekoppeld.</p>
+        {% endif %}
+
+        <p><em>Deze actie kan niet ongedaan worden gemaakt.</em></p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
+        <a href="{% url 'bean_detail' bean.pk %}" class="btn btn-secondary">Annuleren</a>
+    </form>
+</div>
+{% endblock %}
